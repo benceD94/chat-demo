@@ -1,0 +1,15 @@
+.UserItem {
+ display: flex;
+ align-items: center;
+}
+
+.UserItem-image {
+  padding: 5px;
+  border-radius: 50%;
+  border: 1px solid #417fda;
+  margin-right: 5px;
+}
+
+.UserItem-action {
+  margin-left: auto;
+}

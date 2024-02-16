@@ -1,0 +1,10 @@
+.FriendsList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #6b6b6b;
+}
+
+.FriendsList-item {
+  border-bottom: 1px solid #6b6b6b;
+  padding: 16px;
+}
