@@ -12,6 +12,21 @@
   padding: 16px 8px;
   min-height: 200px;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.Chat-message {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #1c5ece;
+  margin-bottom: 16px;
+}
+
+.Chat-message--out {
+  border-color: #8bce4f;
+  align-self: flex-end;
 }
 
 .Chat-footer {

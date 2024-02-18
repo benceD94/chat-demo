@@ -1,22 +1,49 @@
-import React, { useContext, useState } from "react";
-import {  Box, Button, Paper, TextField } from '@mui/material';
+import React, { KeyboardEvent, useContext, useState } from "react";
+import { useQuery } from 'react-query';
+import { Box, Button, CircularProgress, Paper, TextField } from '@mui/material';
+import classnames from 'classnames';
 
+import Queries from "../../constants/queries";
 import UserItem from "../UserItem";
 import { Send } from '@mui/icons-material';
 
 import './style.css';
 import { ChatContext } from "../ChatContextProvider";
+import { getMessageForUser, sendMessage } from "../../infra/message";
 
 const Chat: React.FC = () => {
-  const { recipient } = useContext(ChatContext);
+  const { recipient, sender } = useContext(ChatContext);
 
   const [message, setMessage] = useState<string>('');
 
-  if (!recipient) return <></>;
+  const { data: messages, isLoading, refetch } = useQuery(
+    [Queries.Users, recipient],
+    () => getMessageForUser(recipient?.id as string).then((res) => res.messages),
+    {
+      enabled: !!recipient,
+      // TODO: replace auto refetch with websocket
+      refetchInterval: 3000,
+    }
+  );
+
+  if (!recipient || !sender) return <></>;
 
   const handleSendMessage = () => {
-    setMessage('');
+    sendMessage({
+      senderId: sender?.id,
+      recieverId: recipient.id,
+      content: message
+    }).then(() => {
+      setMessage('');
+      refetch();
+    });
   };
+
+  const handleKeyUp = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
 
   return (
     <Paper className="Chat">
@@ -24,7 +51,14 @@ const Chat: React.FC = () => {
         <UserItem user={recipient} />
       </Box>
       <Box className="Chat-body">
-        message
+        {isLoading  && <CircularProgress />}
+        {messages?.map((message, messageIndex) => <Box key={messageIndex} className={classnames([
+          'Chat-message',
+          message.from === sender?.id && 'Chat-message--out',
+          message.to === sender?.id && 'Chat-message--in',
+        ])}>
+          {message.content}
+        </Box>)}
       </Box>
       <Box className="Chat-footer">
         <TextField
@@ -37,6 +71,7 @@ const Chat: React.FC = () => {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setMessage(event.target.value);
           }}
+          onKeyUp={handleKeyUp}
         />
         <Button
           variant="text"
