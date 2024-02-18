@@ -4,6 +4,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import { makeServer } from "./mirage";
 import FriendsList from './components/FriendsList';
 import { Grid } from '@mui/material';
+import ChatContextProvider from './components/ChatContextProvider';
 
 makeServer({ environment: 'development' });
 
@@ -18,11 +19,13 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Grid container>
-        <Grid item xs={1} md={2}>
-          <FriendsList />
+      <ChatContextProvider>
+        <Grid container>
+          <Grid item xs={1} md={2}>
+            <FriendsList />
+          </Grid>
         </Grid>
-      </Grid>
+      </ChatContextProvider>
     </QueryClientProvider>
   );
 }

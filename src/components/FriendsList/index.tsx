@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from 'react-query';
 import { CircularProgress, Box, Paper } from '@mui/material';
 
@@ -8,8 +8,11 @@ import UserItem from "../UserItem";
 
 import './style.css';
 import { User } from "../../types/user";
+import { ChatContext } from "../ChatContextProvider";
 
 const FriendsList: React.FC = () => {
+  const { setRecipient } = useContext(ChatContext);
+
   const { data: users, isLoading } = useQuery(
     [Queries.Users],
     () => getUsers().then((res) => res.users)
@@ -18,7 +21,7 @@ const FriendsList: React.FC = () => {
   if (isLoading || !users) return <CircularProgress />;
 
   const handleMessageUser = (user: User) => {
-    // TODO: handle messaging
+    setRecipient(user);
   };
 
   return (
