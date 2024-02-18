@@ -1,0 +1,22 @@
+.Chat {
+  border: 1px solid #6b6b6b;
+}
+
+.Chat-header {
+  border-bottom: 1px solid #6b6b6b;
+  padding: 16px;
+}
+
+.Chat-body {
+  border-bottom: 1px solid #6b6b6b;
+  padding: 16px 8px;
+  min-height: 200px;
+  overflow: scroll;
+}
+
+.Chat-footer {
+  padding: 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

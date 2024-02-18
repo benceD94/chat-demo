@@ -8,13 +8,13 @@ import './style.css';
 
 export interface Props {
   user: User;
-  onMessageUser: (user: User) => void;
+  onMessageUser?: (user: User) => void;
 }
 
 const UserItem: React.FC<Props> = ({ user, onMessageUser }) => {
 
   const handleMessageUser = () => {
-    onMessageUser(user);
+    if (onMessageUser) onMessageUser(user);
   };
 
   // Return user image if possible, otherwise user initials
@@ -33,7 +33,7 @@ const UserItem: React.FC<Props> = ({ user, onMessageUser }) => {
     <Box className="UserItem">
       <Box className="UserItem-image">{userIcon}</Box>
       {user.name}
-      <Box className="UserItem-action">
+      {onMessageUser && <Box className="UserItem-action">
         <Button
           variant="text"
           size="small"
@@ -42,7 +42,7 @@ const UserItem: React.FC<Props> = ({ user, onMessageUser }) => {
         >
           <MessageIcon />
         </Button>
-      </Box>
+      </Box>}
     </Box>
   );
 };
