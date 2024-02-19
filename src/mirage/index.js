@@ -35,14 +35,14 @@ export function makeServer({ environment = 'test' } = {}) {
         });
       });
 
-      this.post(`${endpointURL}/messages/:senderId/:recieverId`, (schema, request) => {
+      this.post(`${endpointURL}/messages/:senderId/:receiverId`, (schema, request) => {
         const senderId = request.params.senderId;
-        const recieverId = request.params.recieverId;
+        const receiverId = request.params.receiverId;
         const content = JSON.parse(request.requestBody);
 
         schema.messages.create({
           from: senderId,
-          to: recieverId,
+          to: receiverId,
           ...content
         });
       });

@@ -8,7 +8,7 @@ interface MessageResponse {
 
 interface SendMessageRequest {
   senderId: string;
-  recieverId: string;
+  receiverId: string;
   content: string;
 }
 
@@ -19,10 +19,10 @@ export const getMessageForUser = async (userId: string): Promise<MessageResponse
 
 export const sendMessage = async ({
   senderId,
-  recieverId,
+  receiverId,
   content,
 }: SendMessageRequest) => {
-  return await fetch(`${BACKEND_HOSTS}/messages/${senderId}/${recieverId}`, {
+  return await fetch(`${BACKEND_HOSTS}/messages/${senderId}/${receiverId}`, {
     method: "POST",
     body: JSON.stringify({content})
   });

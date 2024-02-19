@@ -12,8 +12,10 @@ export const MockChatContextProvider: React.FC<MockProps> = ({
 }) => {
   const value: Context = {
     isLoaded: true,
+    isLoadingMessages: false,
     recipient: null,
     sender: null,
+    messages: [],
     setRecipient: jest.fn(),
     ...overrides,
   };

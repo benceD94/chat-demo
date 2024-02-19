@@ -1,41 +1,28 @@
 import React, { KeyboardEvent, useContext, useState } from "react";
-import { useQuery } from 'react-query';
 import { Box, Button, CircularProgress, Paper, TextField } from '@mui/material';
 import classnames from 'classnames';
 
-import Queries from "../../constants/queries";
 import UserItem from "../UserItem";
 import { Send } from '@mui/icons-material';
 
 import './style.css';
 import { ChatContext } from "../ChatContextProvider";
-import { getMessageForUser, sendMessage } from "../../infra/message";
+import { sendMessage } from "../../infra/message";
 
 const Chat: React.FC = () => {
-  const { recipient, sender } = useContext(ChatContext);
+  const { recipient, sender, messages, isLoadingMessages } = useContext(ChatContext);
 
   const [message, setMessage] = useState<string>('');
-
-  const { data: messages, isLoading, refetch } = useQuery(
-    [Queries.Users, recipient],
-    () => getMessageForUser(recipient?.id as string).then((res) => res.messages),
-    {
-      enabled: !!recipient,
-      // TODO: replace auto refetch with websocket
-      refetchInterval: 3000,
-    }
-  );
 
   if (!recipient || !sender) return <></>;
 
   const handleSendMessage = () => {
     sendMessage({
       senderId: sender?.id,
-      recieverId: recipient.id,
+      receiverId: recipient.id,
       content: message
     }).then(() => {
       setMessage('');
-      refetch();
     });
   };
 
@@ -51,7 +38,7 @@ const Chat: React.FC = () => {
         <UserItem user={recipient} />
       </Box>
       <Box className="Chat-body">
-        {isLoading  && <CircularProgress />}
+        {isLoadingMessages  && <CircularProgress />}
         {messages?.map((message, messageIndex) => <Box key={messageIndex} className={classnames([
           'Chat-message',
           message.from === sender?.id && 'Chat-message--out',
