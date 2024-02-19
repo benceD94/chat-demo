@@ -45,7 +45,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode;}> = ({ children 
     {
       enabled: !!internalRecipient,
       // TODO: replace auto refetch with websocket
-      refetchInterval: 3000,
+      refetchInterval: 2000,
     }
   );
 

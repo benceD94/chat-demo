@@ -45,6 +45,15 @@ export function makeServer({ environment = 'test' } = {}) {
           to: receiverId,
           ...content
         });
+
+        // Create fake response
+        setTimeout(() => {
+          schema.messages.create({
+            to: senderId,
+            from: receiverId,
+            content: 'Fake answer'
+          });
+        }, 3000)
       });
 
       this.passthrough(`${endpointURL}/***`);
