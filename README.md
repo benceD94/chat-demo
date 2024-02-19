@@ -1,6 +1,20 @@
-# Getting Started with Create React App
+# Chat POC
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+Small Proof of Concept application that includes:
+- [MirageJS](https://miragejs.com/)
+    - To create a mocked API handling Users and messages
+- FriendList
+    - A simple List of users to select someone to chat with
+- ChatContextProvider
+    - Handling chat events and messages
+- Chat
+    - Reusable component to show and send messages
+
+## Future Improvements
+- Instead of refetching the messages every N seconds, implement a Web Socket connection to show messages on an update event
+    - Currently mirageJS doesn't handle mocked web sockets, so it's missing in the POC
 
 ## Available Scripts
 
@@ -38,9 +52,3 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
