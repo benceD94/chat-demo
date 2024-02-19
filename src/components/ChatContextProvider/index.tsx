@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from '../../types/user';
 import { Message } from '../../types/message';
 import { useQuery } from 'react-query';
@@ -11,7 +11,7 @@ export interface Context {
   recipient: User | null;
   sender: User | null;
   messages: Message[];
-  setRecipient: (user: User) => void;
+  setRecipient: (user: User | null) => void;
 }
 
 const defaultCallback = () => {
@@ -28,6 +28,14 @@ export const ChatContext = React.createContext<Context>({
 });
 ChatContext.displayName = 'ChatContextProvider';
 
+/**
+ * TODO: For future improvement store messages in an object where the key is the recipientID
+ * This way the frontend can cache old messages and doesn't need to reload them.
+ * eg.:
+ * internalMessages: {
+ *    [userId: string]: Message[],
+ * }
+ */
 const ChatContextProvider: React.FC<{children: React.ReactNode;}> = ({ children }) => {
   const [internalRecipient, setInternalRecipient] = useState<User | null>(null);
   const [internalSender] = useState<User | null>({
@@ -37,7 +45,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode;}> = ({ children 
   const [internalMessages, setInternalMessages] = useState<Message[]>([]);
 
 
-  const { isLoading } = useQuery(
+  const { isFetching } = useQuery(
     [Queries.Messages, internalRecipient],
     () => getMessageForUser(internalRecipient?.id as string).then((res) => {
       setInternalMessages(res.messages);
@@ -49,9 +57,14 @@ const ChatContextProvider: React.FC<{children: React.ReactNode;}> = ({ children 
     }
   );
 
+  //  When recipient changes remove old messages
+  useEffect(() => {
+    setInternalMessages([]);
+  }, [internalRecipient]);
+
   const value = {
     isLoaded: true,
-    isLoadingMessages: isLoading,
+    isLoadingMessages: isFetching,
     recipient: internalRecipient,
     sender: internalSender,
     messages: internalMessages,

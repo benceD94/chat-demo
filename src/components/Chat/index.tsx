@@ -1,16 +1,22 @@
-import React, { KeyboardEvent, useContext, useState } from "react";
+import React, { KeyboardEvent, useContext, useEffect, useState } from "react";
 import { Box, Button, CircularProgress, Paper, TextField } from '@mui/material';
 import classnames from 'classnames';
 
 import UserItem from "../UserItem";
-import { Send } from '@mui/icons-material';
+import { Send, Close } from '@mui/icons-material';
 
 import './style.css';
 import { ChatContext } from "../ChatContextProvider";
 import { sendMessage } from "../../infra/message";
 
 const Chat: React.FC = () => {
-  const { recipient, sender, messages, isLoadingMessages } = useContext(ChatContext);
+  const {
+    recipient,
+    sender,
+    messages,
+    isLoadingMessages,
+    setRecipient,
+  } = useContext(ChatContext);
 
   const [message, setMessage] = useState<string>('');
 
@@ -30,15 +36,26 @@ const Chat: React.FC = () => {
     if (event.key === 'Enter') {
       handleSendMessage();
     }
-  }
+  };
+
+  const handleCloseChat = () => {
+    setRecipient(null);
+  };
 
   return (
     <Paper className="Chat">
       <Box className="Chat-header">
         <UserItem user={recipient} />
+        <Button
+          variant="text"
+          size="small"
+          data-testid="close-chat"
+          onClick={handleCloseChat}
+        >
+          <Close />
+        </Button>
       </Box>
       <Box className="Chat-body">
-        {isLoadingMessages  && <CircularProgress />}
         {messages?.map((message, messageIndex) => <Box key={messageIndex} className={classnames([
           'Chat-message',
           message.from === sender?.id && 'Chat-message--out',
@@ -46,6 +63,7 @@ const Chat: React.FC = () => {
         ])}>
           {message.content}
         </Box>)}
+        {isLoadingMessages  && <CircularProgress />}
       </Box>
       <Box className="Chat-footer">
         <TextField
