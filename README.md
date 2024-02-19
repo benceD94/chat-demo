@@ -16,6 +16,12 @@ Small Proof of Concept application that includes:
 - Instead of refetching the messages every N seconds, implement a Web Socket connection to show messages on an update event
     - Currently mirageJS doesn't handle mocked web sockets, so it's missing in the POC
 
+## Initial setup
+1. Create .env file from .env-example `cp .env-example .env`
+2. Add API url to `.env` file (since it's a POC, any madeup url will do)
+3. Install dependencies `yarn install`
+4. Check out the Available Scripts to see how to start the App
+
 ## Available Scripts
 
 In the project directory, you can run:
